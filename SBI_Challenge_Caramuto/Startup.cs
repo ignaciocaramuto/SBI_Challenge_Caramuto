@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SBI_Challenge_Caramuto.Profiles;
+using SBI_Challenge_Caramuto.Services;
 using System;
 
 namespace SBI_Challenge_Caramuto
@@ -27,6 +28,8 @@ namespace SBI_Challenge_Caramuto
             services.AddMediatR(cfg => {
                 cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
             });
+            services.AddScoped<IDummyDataService, DummyDataService>();
+            services.AddHttpClient<DummyDataService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SBI_Challenge_Caramuto", Version = "v1" });
