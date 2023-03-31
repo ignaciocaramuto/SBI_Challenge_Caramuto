@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 namespace SBI_Challenge_Caramuto.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class ChallengeController : ControllerBase
+    [Route("api/[controller]")]
+    public class DummyDataController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
-        public ChallengeController(IMediator mediator, IMapper mapper)
+        public DummyDataController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;
