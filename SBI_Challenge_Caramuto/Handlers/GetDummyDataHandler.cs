@@ -22,19 +22,31 @@ namespace SBI_Challenge_Caramuto.Handlers
         }
         public async Task<List<ServerPost>> Handle(GetDummyDataQuery request, CancellationToken cancellationToken)
         {
-            List<ServerPost> serverPostList;
             try
             {
                 var response = await _client.GetAsync(_url);
-                var content = await response.Content.ReadAsStringAsync();
-                serverPostList = JsonSerializer.Deserialize<List<ServerPost>>(content);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var serverPostList = JsonSerializer.Deserialize<List<ServerPost>>(content);
+                    return serverPostList;
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Error fetching dummy data from API: {response.StatusCode} - {errorMessage}");
+                }
             }
-            catch (Exception)
+            catch (HttpRequestException ex)
             {
-                return null;
+                throw new Exception($"Error connecting to dummy data API: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Unexpected error ocurred: {ex.Message}");
             }
 
-            return serverPostList;
+            finally { _client.Dispose(); }
         }
     }
 }
